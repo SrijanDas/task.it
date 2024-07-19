@@ -193,7 +193,7 @@ function List({ list, setList }: Props) {
                 </DropdownMenu>
             </CardHeader>
             {list.cards && list.cards.length > 0 && (
-                <CardContent className="p-0">
+                <CardContent className="p-0 bg-[#F1F2F4]">
                     <DragDropContext onDragEnd={onDragEnd}>
                         <Droppable droppableId="droppable">
                             {(provided, snapshot) => (
