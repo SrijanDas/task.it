@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     Card,
     CardContent,
@@ -9,7 +9,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Button } from "../ui/button";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, SquareCheckBig } from "lucide-react";
 import AddCard from "../card-item/add-card";
 import {
     DropdownMenu,
@@ -33,15 +33,27 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import CardItem from "../card-item/card-item";
-import { ScrollArea } from "../ui/scroll-area";
+// import { ScrollArea } from "../ui/scroll-area";
+import {
+    DragDropContext,
+    Draggable,
+    Droppable,
+    DropResult,
+    OnDragEndResponder,
+} from "@hello-pangea/dnd";
+import { reorder } from "@/utils/reorder";
+import { updateCardOrder } from "@/actions/card.actions";
 
 type Props = {
     list: ListItem;
+    setList: React.Dispatch<React.SetStateAction<ListItem[]>>;
 };
 
-function List({ list }: Props) {
+function List({ list, setList }: Props) {
     const addCardButtonRef = useRef<HTMLButtonElement | null>(null);
     const cardContainerRef = useRef<HTMLDivElement>(null);
+
+    // const [list, setList] = useState(serverList);
 
     function handleDeleteList(listId: string) {
         toast.promise(deleteList(listId), {
@@ -71,8 +83,42 @@ function List({ list }: Props) {
         }
         setShowInput(false);
     }
+
+    function onDragEnd(result: DropResult): void {
+        // dropped outside the list
+        if (!result.destination) {
+            return;
+        }
+
+        if (result.destination.index === result.source.index) {
+            return;
+        }
+
+        const items = reorder(
+            list.cards ?? [],
+            result.source.index,
+            result.destination.index
+        );
+
+        setList((prev) =>
+            prev.map((l) =>
+                l.id === list.id
+                    ? {
+                          ...list,
+                          cards: items,
+                      }
+                    : l
+            )
+        );
+
+        // update index in db
+        updateCardOrder(items);
+    }
+
+    const [open, setOpen] = useState<string | null>(null);
+
     return (
-        <Card>
+        <Card className="bg-[#F1F2F4]">
             <CardHeader className="flex-row items-center justify-between">
                 <CardTitle className="text-md w-full">
                     {showInput ? (
@@ -148,16 +194,65 @@ function List({ list }: Props) {
             </CardHeader>
             {list.cards && list.cards.length > 0 && (
                 <CardContent className="p-0">
-                    <div className="flex flex-col gap-2 max-h-[calc(100vh-15rem)] px-3 overflow-y-auto overflow-x-hidden">
-                        {list.cards?.map((card) => (
-                            <CardItem
-                                key={card.id}
-                                cardItem={card}
-                                listName={list.name}
-                            />
-                        ))}
-                        <div ref={cardContainerRef} className="p-1" />
-                    </div>
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <Droppable droppableId="droppable">
+                            {(provided, snapshot) => (
+                                <div
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                    className="flex flex-col gap-2 max-h-[calc(100vh-15rem)] px-3 overflow-y-auto overflow-x-hidden"
+                                >
+                                    {list.cards?.map((card, index) => (
+                                        <div key={`card-wrapper-${card.id}`}>
+                                            <Draggable
+                                                key={card.id}
+                                                draggableId={card.id}
+                                                index={index}
+                                            >
+                                                {(provided, snapshot) => (
+                                                    <div
+                                                        onClick={() =>
+                                                            setOpen(card.id)
+                                                        }
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        className="bg-white rounded-lg px-3 py-2 shadow-md border text-wrap break-all"
+                                                    >
+                                                        <span>{card.name}</span>
+                                                        {card.total_checklist_items && (
+                                                            <span className="flex items-center gap-2">
+                                                                <SquareCheckBig
+                                                                    size={16}
+                                                                    className="mb-0.5"
+                                                                />
+                                                                {`${card.completed_checklist_items}/${card.total_checklist_items}`}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </Draggable>
+
+                                            <CardItem
+                                                cardItem={card}
+                                                listName={list.name}
+                                                onOpenChange={(value) =>
+                                                    setOpen(value)
+                                                }
+                                                open={open === card.id}
+                                            />
+                                        </div>
+                                    ))}
+                                    {provided.placeholder}
+
+                                    <div
+                                        ref={cardContainerRef}
+                                        className="p-1"
+                                    />
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
                 </CardContent>
             )}
 

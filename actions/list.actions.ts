@@ -13,7 +13,7 @@ export async function createList(title: string) {
     const { data, error } = await supabase.from("list").insert({name: title }).select().single()
 
 
-    revalidatePath("/")
+    // revalidatePath("/")
 
     return { data, error }
 }

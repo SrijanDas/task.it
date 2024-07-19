@@ -27,10 +27,14 @@ import { Checkbox } from "../ui/checkbox";
 import ChecklistItem from "./checklist-items";
 import { ScrollArea } from "../ui/scroll-area";
 
-type Props = { cardItem: CardItem; listName: string };
+type Props = {
+    cardItem: CardItem;
+    listName: string;
+    open: boolean;
+    onOpenChange: (value: string | null) => void;
+};
 
-function CardItem({ cardItem, listName }: Props) {
-    const [open, setOpen] = useState(false);
+function CardItem({ cardItem, listName, open, onOpenChange }: Props) {
     const fetchChecklists = useChecklistStore((state) => state.fetchChecklists);
     const checkLists = useChecklistStore((state) => state.checkLists);
     const isPending = useChecklistStore((state) => state.isLoading);
@@ -43,21 +47,12 @@ function CardItem({ cardItem, listName }: Props) {
     }, [cardItem.id, open]);
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button
-                    className="flex-col gap-2 h-auto rounded-md items-start text-wrap w-full text-start !break-all"
-                    variant="secondary"
-                >
-                    {cardItem.name}
-                    {cardItem.total_checklist_items && (
-                        <span className="flex items-center gap-2">
-                            <SquareCheckBig size={16} className="mb-0.5" />
-                            {`${cardItem.completed_checklist_items}/${cardItem.total_checklist_items}`}
-                        </span>
-                    )}
-                </Button>
-            </DialogTrigger>
+        <Dialog
+            open={open}
+            onOpenChange={(value) =>
+                value ? onOpenChange(cardItem.id) : onOpenChange(null)
+            }
+        >
             <DialogContent className="max-h-[calc(100dvh-1.5rem)]">
                 <ScrollArea className="max-h-[calc(100dvh-5rem)] pr-4">
                     <DialogHeader className="text-start mb-10">

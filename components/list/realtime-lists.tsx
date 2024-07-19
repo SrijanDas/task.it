@@ -117,7 +117,7 @@ function RealtimeLists({ listItems }: Props) {
     return (
         <>
             {realtimeLists.map((list) => (
-                <List key={list.id} list={list} />
+                <List setList={setRealtimeLists} key={list.id} list={list} />
             ))}
         </>
     );

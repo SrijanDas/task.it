@@ -16,3 +16,10 @@ export async function createCard({title, listId, index}:{title: string; listId: 
 
     return {data, error}
 }
+
+
+export async function updateCardOrder(cards: CardItem[]) {
+    const supabase = createClient()
+    await supabase.from("cards").upsert(cards)
+
+}
