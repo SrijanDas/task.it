@@ -31,7 +31,10 @@ function RealtimeLists({ listItems }: Props) {
                         setRealtimeLists((prev) =>
                             prev.map((l) =>
                                 l.id === payload.new.id
-                                    ? (payload.new as ListItem)
+                                    ? {
+                                          ...(payload.new as ListItem),
+                                          cards: l.cards,
+                                      }
                                     : l
                             )
                         );

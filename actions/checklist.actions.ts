@@ -33,13 +33,24 @@ export async function createCheckListItem({ title, checkListId, index, cardId }:
 
     })
     const {count} = await supabase.from("checklist_items").select("*", {count: "exact"}).eq("card_id", cardId)
-    await supabase.from("cards").update({ total_checklist_items: count }).eq("id", cardId)
+
+    await supabase.from("cards").update({ total_checklist_items: count })
+    .eq('id', cardId)
+   
+
     return { error, data };
 }
 
 export async function updateCheckListItem(checklistItem: CheckListItem) {
     const supabase = createClient()
-    const {data, error} = await supabase.from("checklist_items").update(checklistItem).eq("id", checklistItem.id)
+    const {data, error} = await supabase.from("checklist_items").update(checklistItem).eq("id", checklistItem.id).select().single()
+
+    const {count} = await supabase.from("checklist_items").select("*", {count: "exact"}).eq("card_id", data?.card_id ?? "").eq("completed", true)
+
+    await supabase.from("cards").update({ completed_checklist_items: count })
+    .eq('id', data?.card_id ?? "")
+    .select()
+
 
     return { error, data };
 }

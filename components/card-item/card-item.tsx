@@ -45,13 +45,22 @@ function CardItem({ cardItem, listName }: Props) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="justify-between" variant="secondary">
+                <Button
+                    className="flex-col gap-2 h-auto rounded-md items-start text-wrap w-full text-start !break-all"
+                    variant="secondary"
+                >
                     {cardItem.name}
+                    {cardItem.total_checklist_items && (
+                        <span className="flex items-center gap-2">
+                            <SquareCheckBig size={16} className="mb-0.5" />
+                            {`${cardItem.completed_checklist_items}/${cardItem.total_checklist_items}`}
+                        </span>
+                    )}
                 </Button>
             </DialogTrigger>
             <DialogContent className="max-h-[calc(100dvh-1.5rem)]">
                 <ScrollArea className="max-h-[calc(100dvh-5rem)] pr-4">
-                    <DialogHeader className="text-start">
+                    <DialogHeader className="text-start mb-10">
                         <DialogTitle className="flex items-center text-2xl gap-3">
                             <Rows3 size={24} />
                             {cardItem.name}
@@ -100,7 +109,7 @@ function CardItem({ cardItem, listName }: Props) {
                                         )}
                                         <div className="ml-10">
                                             <AddCheckListItems
-                                                cardId={cardItem.id}
+                                                cardId={checklist.card_id}
                                                 index={
                                                     checklist.checklist_items
                                                         .length

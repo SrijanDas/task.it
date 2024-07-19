@@ -34,7 +34,6 @@ export async function updateList({listId, title}:{listId: string, title: string}
 
     const { data, error } = await supabase.from("list").update({ name: title }).match({ id: listId })
 
-    revalidatePath("/")
 
     return { data, error }
 }

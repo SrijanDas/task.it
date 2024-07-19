@@ -112,7 +112,7 @@ function List({ list }: Props) {
                         </Form>
                     ) : (
                         <Button
-                            className="cursor-pointer w-full justify-start"
+                            className="cursor-pointer w-full justify-start font-semibold text-wrap text-start"
                             variant="ghost"
                             onClick={() => setShowInput(true)}
                         >
@@ -146,9 +146,9 @@ function List({ list }: Props) {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </CardHeader>
-            <CardContent className="p-0">
-                <ScrollArea>
-                    <div className="flex flex-col gap-2 max-h-[calc(100vh-15rem)] px-3">
+            {list.cards && list.cards.length > 0 && (
+                <CardContent className="p-0">
+                    <div className="flex flex-col gap-2 max-h-[calc(100vh-15rem)] px-3 overflow-y-auto overflow-x-hidden">
                         {list.cards?.map((card) => (
                             <CardItem
                                 key={card.id}
@@ -158,8 +158,9 @@ function List({ list }: Props) {
                         ))}
                         <div ref={cardContainerRef} className="p-1" />
                     </div>
-                </ScrollArea>
-            </CardContent>
+                </CardContent>
+            )}
+
             <CardFooter className="">
                 <AddCard
                     ref={addCardButtonRef}

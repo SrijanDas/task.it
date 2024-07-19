@@ -48,8 +48,6 @@ function AddCheckListItems({ cardId, checkListId, index }: Props) {
             created_at: new Date().toISOString(),
         });
 
-        setShowInput(false);
-
         // update db
         const { error } = await createCheckListItem({
             title: data.title,
@@ -64,6 +62,7 @@ function AddCheckListItems({ cardId, checkListId, index }: Props) {
         }
 
         form.reset();
+        setShowInput(false);
     }
     return (
         <>
