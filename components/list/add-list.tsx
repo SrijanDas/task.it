@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import clsx from "clsx";
 import Spinner from "../ui/spinner";
@@ -61,6 +61,7 @@ function AddList({}: Props) {
                         className="w-full"
                         onClick={() => setShowInput(true)}
                     >
+                        <Plus size={18} />
                         Add another list
                     </Button>
                 )}

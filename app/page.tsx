@@ -1,4 +1,3 @@
-import List from "@/components/list/list";
 import AddList from "@/components/list/add-list";
 import { redirect } from "next/navigation";
 import { getLists } from "@/actions/list.actions";
@@ -12,7 +11,7 @@ export default async function Home() {
     }
 
     return (
-        <main className="flex h-screen flex-row items-start gap-6 p-24 w-screen overflow-x-scroll bg-slate-200">
+        <main className="flex h-screen flex-row items-start gap-6 p-10 w-screen overflow-x-scroll overflow-y-hidden bg-slate-200">
             <RealtimeLists listItems={data ?? []} />
             <AddList />
         </main>

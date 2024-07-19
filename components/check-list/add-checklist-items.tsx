@@ -1,66 +1,78 @@
-"use client";
-
+import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
-import React, { forwardRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { CheckListItemForm } from "@/validators/checklist.validator";
+
 import {
     Form,
     FormControl,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { X } from "lucide-react";
-import Spinner from "../ui/spinner";
+} from "../ui/form";
+import { createCheckListItem } from "@/actions/checklist.actions";
 import { toast } from "sonner";
-import { createCard } from "@/actions/card.actions";
-import { ListItemInput, ListItemSchema } from "@/validators/list.validator";
+import { Input } from "../ui/input";
+import Spinner from "../ui/spinner";
+import { useChecklistStore } from "@/store/use-checklist";
+import { nanoid } from "nanoid";
 
-type Props = { listId: string; index: number; callback?: () => void };
+type Props = {
+    checkListId: string;
+    cardId: string;
+    index: number;
+};
 
-const AddCard = forwardRef<HTMLButtonElement, Props>(function AddCard(
-    { listId, index, callback },
-    ref
-) {
-    const [showInput, setShowInput] = useState<boolean>(false);
-
-    const form = useForm<ListItemInput>({
-        resolver: zodResolver(ListItemSchema),
+function AddCheckListItems({ cardId, checkListId, index }: Props) {
+    const [showInput, setShowInput] = useState(false);
+    const addChecklistItem = useChecklistStore(
+        (state) => state.addChecklistItem
+    );
+    const form = useForm<CheckListItemForm>({
         defaultValues: {
             title: "",
         },
     });
 
-    async function onSubmit(data: ListItemInput) {
-        const { error } = await createCard({
-            title: data.title,
-            listId,
+    async function onSubmit(data: CheckListItemForm) {
+        // update state
+        const id = nanoid();
+        addChecklistItem({
+            card_id: cardId,
+            checklist_id: checkListId,
+            id,
             index,
+            title: data.title,
+            completed: false,
+            created_at: new Date().toISOString(),
         });
+
+        setShowInput(false);
+
+        // update db
+        const { error } = await createCheckListItem({
+            title: data.title,
+            checkListId,
+            index,
+            cardId,
+        });
+
         if (error) {
-            toast.error("Error creating card");
+            toast.error("Error creating item");
             return;
         }
-        form.reset();
-        callback?.();
-    }
 
+        form.reset();
+    }
     return (
         <>
             {!showInput && (
-                <Button
-                    ref={ref}
-                    onClick={() => setShowInput(true)}
-                    variant="ghost"
-                    className="w-full"
-                >
-                    <Plus size={18} />
-                    Add a card
+                <Button onClick={() => setShowInput(true)} variant="secondary">
+                    Add an item
                 </Button>
             )}
+
             {showInput && (
                 <Form {...form}>
                     <form
@@ -75,7 +87,7 @@ const AddCard = forwardRef<HTMLButtonElement, Props>(function AddCard(
                                     <FormControl>
                                         <Input
                                             autoFocus
-                                            placeholder="Enter a title for this card..."
+                                            placeholder="Add an item..."
                                             {...field}
                                         />
                                     </FormControl>
@@ -89,16 +101,15 @@ const AddCard = forwardRef<HTMLButtonElement, Props>(function AddCard(
                                 disabled={form.formState.isSubmitting}
                                 type="submit"
                             >
-                                Add card
+                                Add
                                 {form.formState.isSubmitting && <Spinner />}
                             </Button>
                             <Button
                                 onClick={() => setShowInput(false)}
                                 variant="ghost"
                                 type="button"
-                                size="icon"
                             >
-                                <X size={24} />
+                                Cancel
                             </Button>
                         </div>
                     </form>
@@ -106,6 +117,6 @@ const AddCard = forwardRef<HTMLButtonElement, Props>(function AddCard(
             )}
         </>
     );
-});
+}
 
-export default AddCard;
+export default AddCheckListItems;

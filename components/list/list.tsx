@@ -32,7 +32,8 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import RealtimeCardItems from "../card-item/realtime-card-items";
+import CardItem from "../card-item/card-item";
+import { ScrollArea } from "../ui/scroll-area";
 
 type Props = {
     list: ListItem;
@@ -40,6 +41,8 @@ type Props = {
 
 function List({ list }: Props) {
     const addCardButtonRef = useRef<HTMLButtonElement | null>(null);
+    const cardContainerRef = useRef<HTMLDivElement>(null);
+
     function handleDeleteList(listId: string) {
         toast.promise(deleteList(listId), {
             loading: "Deleting list...",
@@ -143,11 +146,31 @@ function List({ list }: Props) {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </CardHeader>
-            <CardContent className="flex flex-col gap-2">
-                <RealtimeCardItems serverCards={list.cards ?? []} />
+            <CardContent className="p-0">
+                <ScrollArea>
+                    <div className="flex flex-col gap-2 max-h-[calc(100vh-15rem)] px-3">
+                        {list.cards?.map((card) => (
+                            <CardItem
+                                key={card.id}
+                                cardItem={card}
+                                listName={list.name}
+                            />
+                        ))}
+                        <div ref={cardContainerRef} className="p-1" />
+                    </div>
+                </ScrollArea>
             </CardContent>
-            <CardFooter>
-                <AddCard ref={addCardButtonRef} listId={list.id} />
+            <CardFooter className="">
+                <AddCard
+                    ref={addCardButtonRef}
+                    listId={list.id}
+                    index={(list.cards ?? []).length}
+                    callback={() =>
+                        cardContainerRef.current?.scrollIntoView({
+                            behavior: "smooth",
+                        })
+                    }
+                />
             </CardFooter>
         </Card>
     );

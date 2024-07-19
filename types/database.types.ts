@@ -11,33 +11,42 @@ export type Database = {
     Tables: {
       cards: {
         Row: {
+          completed_checklist_items: number | null
           cover_image: string | null
           created_at: string
           created_by: string
           description: string | null
-          id: number
+          id: string
+          index: number
           list_id: string
           name: string
+          total_checklist_items: number | null
           updated_at: string | null
         }
         Insert: {
+          completed_checklist_items?: number | null
           cover_image?: string | null
           created_at?: string
           created_by?: string
           description?: string | null
-          id?: number
+          id?: string
+          index: number
           list_id?: string
           name: string
+          total_checklist_items?: number | null
           updated_at?: string | null
         }
         Update: {
+          completed_checklist_items?: number | null
           cover_image?: string | null
           created_at?: string
           created_by?: string
           description?: string | null
-          id?: number
+          id?: string
+          index?: number
           list_id?: string
           name?: string
+          total_checklist_items?: number | null
           updated_at?: string | null
         }
         Relationships: [
@@ -59,27 +68,40 @@ export type Database = {
       }
       checklist: {
         Row: {
+          card_id: string
           created_at: string
           created_by: string
           id: string
+          index: number | null
           title: string
           updated_at: string | null
         }
         Insert: {
+          card_id: string
           created_at?: string
           created_by?: string
           id?: string
+          index?: number | null
           title: string
           updated_at?: string | null
         }
         Update: {
+          card_id?: string
           created_at?: string
           created_by?: string
           id?: string
+          index?: number | null
           title?: string
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "checklist_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "cards"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "checklist_created_by_fkey"
             columns: ["created_by"]
@@ -91,21 +113,40 @@ export type Database = {
       }
       checklist_items: {
         Row: {
+          card_id: string
           checklist_id: string | null
+          completed: boolean
           created_at: string
           id: string
+          index: number | null
+          title: string
         }
         Insert: {
+          card_id: string
           checklist_id?: string | null
+          completed?: boolean
           created_at?: string
           id?: string
+          index?: number | null
+          title?: string
         }
         Update: {
+          card_id?: string
           checklist_id?: string | null
+          completed?: boolean
           created_at?: string
           id?: string
+          index?: number | null
+          title?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "checklist_items_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "cards"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "checklist_items_checklist_id_fkey"
             columns: ["checklist_id"]
