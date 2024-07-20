@@ -17,12 +17,15 @@ function ChecklistItem({ item }: Props) {
         await updateCheckListItem({ ...item, completed: value });
     }
     return (
-        <div className="flex items-center gap-3 ml-1">
+        <div className="flex gap-3 ml-1 w-full">
             <Checkbox
                 checked={item.completed}
                 onCheckedChange={handleCheckChange}
+                className="mt-3"
             />
-            {item.completed ? <del>{item.title}</del> : <p>{item.title}</p>}
+            <div className="leading-0 p-2 hover:bg-secondary w-full rounded-xl cursor-pointer">
+                {item.completed ? <del>{item.title}</del> : item.title}
+            </div>
         </div>
     );
 }

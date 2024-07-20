@@ -70,7 +70,7 @@ function AddCheckList({ cardId, index }: Props) {
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button variant="secondary" className="w-full">
-                    <SquareCheckBig size={16} /> Checklist
+                    <SquareCheckBig className="shrink-0" size={16} /> Checklist
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80">

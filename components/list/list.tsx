@@ -221,15 +221,24 @@ function List({ list, setList }: Props) {
                                                         className="bg-white rounded-lg px-3 py-2 shadow-md border text-wrap break-all"
                                                     >
                                                         <span>{card.name}</span>
-                                                        {card.total_checklist_items && (
-                                                            <span className="flex items-center gap-2">
-                                                                <SquareCheckBig
-                                                                    size={16}
-                                                                    className="mb-0.5"
-                                                                />
-                                                                {`${card.completed_checklist_items}/${card.total_checklist_items}`}
-                                                            </span>
-                                                        )}
+                                                        {card.total_checklist_items &&
+                                                            card.total_checklist_items >
+                                                                0 && (
+                                                                <span className="flex items-center gap-2">
+                                                                    <SquareCheckBig
+                                                                        size={
+                                                                            16
+                                                                        }
+                                                                        className="mb-0.5"
+                                                                    />
+                                                                    {`${
+                                                                        card.completed_checklist_items ??
+                                                                        0
+                                                                    }/${
+                                                                        card.total_checklist_items
+                                                                    }`}
+                                                                </span>
+                                                            )}
                                                     </div>
                                                 )}
                                             </Draggable>

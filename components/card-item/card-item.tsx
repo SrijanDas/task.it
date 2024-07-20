@@ -86,10 +86,7 @@ function CardItem({ cardItem, listName, open, onOpenChange }: Props) {
                                 </div>
 
                                 {checkLists.map((checklist, index) => (
-                                    <div
-                                        key={checklist.id}
-                                        className="space-y-4"
-                                    >
+                                    <div key={checklist.id}>
                                         <Heading>
                                             <SquareCheckBig size={24} />
                                             {checklist.title}
@@ -153,7 +150,7 @@ function CardItem({ cardItem, listName, open, onOpenChange }: Props) {
 
 function Heading({ children }: { children: React.ReactNode }) {
     return (
-        <h4 className="text-lg font-semibold leading-none tracking-tight flex items-center gap-3">
+        <h4 className="text-lg font-semibold leading-none tracking-tight flex items-center gap-3 mb-2">
             {children}
         </h4>
     );
