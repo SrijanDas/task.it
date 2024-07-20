@@ -211,6 +211,7 @@ function List({ list, setList }: Props) {
                                             >
                                                 {(provided, snapshot) => (
                                                     <div
+                                                        role="button"
                                                         onClick={() =>
                                                             setOpen(card.id)
                                                         }
