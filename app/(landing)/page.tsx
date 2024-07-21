@@ -1,8 +1,8 @@
-import Navbar from "@/app/(landing)/_components/navbar";
+import Navbar from "@/app/(landing)/_components/site-navbar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React from "react";
-import SiteFooter from "./_components/footer";
+import SiteFooter from "./_components/site-footer";
 
 type Props = {};
 

@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 import { getLists } from "@/actions/list.actions";
 import RealtimeLists from "@/components/list/realtime-lists";
 
-export default async function Home() {
+type Props = {};
+
+async function BoardIdPage({}: Props) {
     const { data, error } = await getLists();
 
     if (error) {
@@ -17,3 +19,5 @@ export default async function Home() {
         </main>
     );
 }
+
+export default BoardIdPage;
