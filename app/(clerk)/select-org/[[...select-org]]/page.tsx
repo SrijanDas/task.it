@@ -8,6 +8,7 @@ const redirectUrl = "/org/:id";
 function SelectOrgPage({}: Props) {
     return (
         <OrganizationList
+            hidePersonal
             afterCreateOrganizationUrl={redirectUrl}
             afterSelectOrganizationUrl={redirectUrl}
             afterSelectPersonalUrl={redirectUrl}

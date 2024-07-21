@@ -10,7 +10,7 @@ function LandingPage({}: Props) {
     return (
         <div className="h-[100dvh]">
             <Navbar />
-            <main className="flex flex-col items-center justify-center text-center h-full">
+            <main className="flex flex-col items-center justify-center text-center px-6 h-full">
                 <h1 className="text-6xl font-bold">Welcome to Task.it</h1>
                 <p className="text-xl mt-4">
                     An open source alternative of <b>Trello</b>

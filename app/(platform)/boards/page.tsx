@@ -6,6 +6,9 @@ type Props = {};
 
 function BoardsPage({}: Props) {
     const { userId, orgId } = auth();
+    console.log("userId", userId);
+
+    console.log("orgId", orgId);
 
     if (!userId) {
         return redirect("/sign-in");
