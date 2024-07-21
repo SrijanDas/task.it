@@ -51,7 +51,7 @@ function Navbar({}: Props) {
                     </nav>
                     <div className="flex items-center gap-4">
                         <SignedIn>
-                            <Button asChild variant="outline" size="sm">
+                            <Button asChild size="sm">
                                 <Link href="/dashboard">Dashboard</Link>
                             </Button>
                         </SignedIn>
