@@ -8,9 +8,11 @@ import { useOrganization } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { ChevronLeftIcon } from "lucide-react";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
     onOpenChange: (open: boolean) => void;
+    className?: string;
 };
 
 const sidebarItems = [
@@ -28,12 +30,12 @@ const sidebarItems = [
     // },
 ];
 
-function PlatformSidebar({ onOpenChange }: Props) {
+function PlatformSidebar({ onOpenChange, className }: Props) {
     const pathname = usePathname();
     const { organization } = useOrganization();
 
     return (
-        <div className="bg-white h-full border-r">
+        <div className={twMerge("bg-white h-full border-r", className)}>
             <div className="p-4 flex items-center gap-6 justify-between">
                 <div className="flex items-center gap-2">
                     <Avatar className="rounded-md">

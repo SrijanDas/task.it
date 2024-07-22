@@ -6,6 +6,10 @@ import BoardHeader from "@/components/boards/board-header";
 import { cn } from "@/lib/utils";
 import { Gradient, gradients } from "@/components/boards/gradient-button";
 import { getBoardById } from "@/actions/boards.actions";
+import PlatformNavbar from "../../_components/platform-navbar";
+import PlatformSidebarTrigger from "../../_components/platform-sidebar-trigger";
+import PlatformSidebar from "../../_components/platform-sidebar";
+import BoardContent from "./board-content";
 
 type Props = {
     params: {
@@ -30,18 +34,15 @@ async function BoardIdPage({ params }: Props) {
     }
 
     return (
-        <main
+        <div
+            id="bg"
             className={cn(
                 "h-screen overflow-y-hidden",
                 gradients[board?.bg_image as Gradient]
             )}
         >
-            <BoardHeader boardTitle={board?.title} />
-            <div className="flex flex-row items-start gap-6 p-4 h-full w-screen overflow-x-scroll">
-                <RealtimeLists listItems={data ?? []} />
-                <AddList />
-            </div>
-        </main>
+            <BoardContent board={board} lists={data ?? []} />
+        </div>
     );
 }
 

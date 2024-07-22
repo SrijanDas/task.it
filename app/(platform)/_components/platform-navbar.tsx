@@ -1,3 +1,5 @@
+"use client";
+
 import CreateBoard from "@/components/boards/create-board";
 import Logo from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
@@ -5,14 +7,20 @@ import useModal from "@/hooks/use-modal";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { PlusIcon } from "lucide-react";
 import React from "react";
+import { twMerge } from "tailwind-merge";
 
-type Props = {};
+type Props = { className?: string };
 
-function PlatformNavbar({}: Props) {
+function PlatformNavbar({ className }: Props) {
     const modal = useModal();
 
     return (
-        <nav className="bg-white shadow-sm border-b dark:bg-gray-950/90">
+        <nav
+            className={twMerge(
+                "bg-white shadow-sm border-b dark:bg-gray-950/90",
+                className
+            )}
+        >
             <div className="w-full mx-auto px-5  flex items-center h-14 justify-between">
                 <div className="flex items-center gap-2">
                     <Logo />

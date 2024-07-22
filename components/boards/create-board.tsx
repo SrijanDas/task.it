@@ -40,11 +40,11 @@ function CreateBoard({ modal }: Props) {
     const form = useForm<CreateBoardForm>({
         defaultValues: {
             background: "default",
-            title: "",
         },
     });
 
     async function onSubmit(data: CreateBoardForm) {
+        console.log(data);
         if (!userId || !orgId) {
             return;
         }
@@ -120,7 +120,6 @@ function CreateBoard({ modal }: Props) {
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}

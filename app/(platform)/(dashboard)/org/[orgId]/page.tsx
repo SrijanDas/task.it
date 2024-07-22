@@ -6,11 +6,7 @@ type Props = {};
 
 function OrganizationPage({}: Props) {
     const { orgId } = auth();
-    return (
-        <main className="overflow-y-scroll w-full h-full p-12 py-8">
-            {orgId}
-        </main>
-    );
+    return <main className="p-12 py-8">{orgId}</main>;
 }
 
 export default OrganizationPage;

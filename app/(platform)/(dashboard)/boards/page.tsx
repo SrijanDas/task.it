@@ -24,7 +24,7 @@ async function BoardsPage({}: Props) {
     }
 
     return (
-        <main className="overflow-y-scroll w-full p-12 py-8 h-full">
+        <main className="w-full p-12 py-8 h-full">
             <h2 className="font-semibold text-xl mb-6">Boards</h2>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <BoardButton createButton />
