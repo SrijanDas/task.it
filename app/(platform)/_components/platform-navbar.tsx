@@ -9,9 +9,12 @@ import { PlusIcon } from "lucide-react";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-type Props = { className?: string };
+type Props = { className?: string; organizationSwitcherClassName?: string };
 
-function PlatformNavbar({ className }: Props) {
+function PlatformNavbar({
+    className,
+    organizationSwitcherClassName = "",
+}: Props) {
     const modal = useModal();
 
     return (
@@ -24,7 +27,17 @@ function PlatformNavbar({ className }: Props) {
             <div className="w-full mx-auto px-5  flex items-center h-14 justify-between">
                 <div className="flex items-center gap-2">
                     <Logo />
-                    <OrganizationSwitcher hidePersonal />
+                    <OrganizationSwitcher
+                        appearance={{
+                            elements: {
+                                organizationPreviewTextContainer__organizationSwitcherTrigger:
+                                    organizationSwitcherClassName,
+                                organizationSwitcherTriggerIcon:
+                                    organizationSwitcherClassName,
+                            },
+                        }}
+                        hidePersonal
+                    />
                     <Button onClick={() => modal.onOpenChange(true)} size="sm">
                         <span className="hidden md:block">Create</span>
                         <PlusIcon className="w-5 h-5 md:hidden" />

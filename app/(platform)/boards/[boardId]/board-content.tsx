@@ -19,7 +19,10 @@ function BoardContent({ board, lists }: Props) {
     const modal = useModal();
     return (
         <>
-            <PlatformNavbar className="bg-black/20 backdrop-blur-md border-none !text-white" />
+            <PlatformNavbar
+                organizationSwitcherClassName="text-white"
+                className="bg-black/20 backdrop-blur-md border-none !text-white"
+            />
 
             <div className="flex w-full relative h-full">
                 <PlatformSidebarTrigger
