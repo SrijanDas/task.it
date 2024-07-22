@@ -1,11 +1,14 @@
 import { Database as DB } from "./database.types";
 
-
 declare global {
     type Database = DB;
+    type Board = Database["public"]["Tables"]["boards"]["Row"];
     type ListItem = Database["public"]["Tables"]["list"]["Row"] & {
-    cards?: CardItem[]};
+        cards?: CardItem[];
+    };
     type CardItem = Database["public"]["Tables"]["cards"]["Row"];
     type CheckListItem = Database["public"]["Tables"]["checklist_items"]["Row"];
-    type CheckList = Database["public"]["Tables"]["checklist"]["Row"] & {checklist_items?: CheckListItem[]};
+    type CheckList = Database["public"]["Tables"]["checklist"]["Row"] & {
+        checklist_items?: CheckListItem[];
+    };
 }

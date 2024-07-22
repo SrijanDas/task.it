@@ -15,12 +15,15 @@ function PlatformLayout({ children }: React.PropsWithChildren) {
             <PlatformNavbar />
             <div className="flex w-full relative h-full">
                 <button
+                    type="button"
                     onClick={() => modal.onOpenChange(true)}
-                    className="h-full w-4 bg-gray-200 fixed hover:bg-opacity-80"
-                >
+                    className="h-full w-4 bg-gray-200 fixed hover:bg-opacity-80 left-0"
+                ></button>
+
+                <button type="button" onClick={() => modal.onOpenChange(true)}>
                     <ChevronRightIcon
                         size={24}
-                        className="absolute top-3 -right-3 bg-gray-200 border-2 !shrink-0 p-0 rounded-full aspect-square"
+                        className="absolute top-5 -right-3 left-0 bg-gray-200 border-2 !shrink-0 p-0 rounded-full aspect-square"
                     />
                 </button>
                 <div
@@ -34,14 +37,14 @@ function PlatformLayout({ children }: React.PropsWithChildren) {
                 >
                     <PlatformSidebar onOpenChange={modal.onOpenChange} />
                 </div>
-                <main
-                    className={clsx("overflow-y-scroll w-full p-8", {
+                <div
+                    className={clsx("w-full h-full", {
                         "ml-60": modal.open,
-                        "ml-0": !modal.open,
+                        "ml-4": !modal.open,
                     })}
                 >
                     {children}
-                </main>
+                </div>
             </div>
         </div>
     );

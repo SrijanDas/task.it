@@ -1,9 +1,12 @@
 import { useState } from "react";
 
-type ModalTypes = "create-board";
+export type ModalProps = {
+    open: boolean;
+    onOpenChange: (value: boolean) => void;
+};
 
-export default function useModal(modalType?: ModalTypes) {
-    const [open, setOpen] = useState<boolean>(false);
+export default function useModal(defaultValue?: boolean) {
+    const [open, setOpen] = useState<boolean>(defaultValue ?? false);
 
     function onOpenChange(value: boolean) {
         setOpen(value);

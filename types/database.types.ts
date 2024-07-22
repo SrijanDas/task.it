@@ -9,12 +9,39 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      boards: {
+        Row: {
+          bg_image: string | null
+          created_at: string
+          id: string
+          org_id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          bg_image?: string | null
+          created_at?: string
+          id?: string
+          org_id: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          bg_image?: string | null
+          created_at?: string
+          id?: string
+          org_id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       cards: {
         Row: {
           completed_checklist_items: number | null
           cover_image: string | null
           created_at: string
-          created_by: string
+          created_by: string | null
           description: string | null
           id: string
           index: number
@@ -27,7 +54,7 @@ export type Database = {
           completed_checklist_items?: number | null
           cover_image?: string | null
           created_at?: string
-          created_by?: string
+          created_by?: string | null
           description?: string | null
           id?: string
           index: number
@@ -40,7 +67,7 @@ export type Database = {
           completed_checklist_items?: number | null
           cover_image?: string | null
           created_at?: string
-          created_by?: string
+          created_by?: string | null
           description?: string | null
           id?: string
           index?: number
@@ -50,13 +77,6 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "cards_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "cards_list_id_fkey"
             columns: ["list_id"]
@@ -70,7 +90,7 @@ export type Database = {
         Row: {
           card_id: string
           created_at: string
-          created_by: string
+          created_by: string | null
           id: string
           index: number | null
           title: string
@@ -79,7 +99,7 @@ export type Database = {
         Insert: {
           card_id: string
           created_at?: string
-          created_by?: string
+          created_by?: string | null
           id?: string
           index?: number | null
           title: string
@@ -88,7 +108,7 @@ export type Database = {
         Update: {
           card_id?: string
           created_at?: string
-          created_by?: string
+          created_by?: string | null
           id?: string
           index?: number | null
           title?: string
@@ -100,13 +120,6 @@ export type Database = {
             columns: ["card_id"]
             isOneToOne: false
             referencedRelation: "cards"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "checklist_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -159,60 +172,26 @@ export type Database = {
       list: {
         Row: {
           created_at: string
-          created_by: string
+          created_by: string | null
           id: string
-          index: number
+          index: number | null
           name: string
         }
         Insert: {
           created_at?: string
-          created_by?: string
+          created_by?: string | null
           id?: string
-          index?: number
+          index?: number | null
           name: string
         }
         Update: {
           created_at?: string
-          created_by?: string
+          created_by?: string | null
           id?: string
-          index?: number
+          index?: number | null
           name?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "list_created_by_fkey1"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      profiles: {
-        Row: {
-          created_at: string
-          id: string
-          name: string | null
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          name?: string | null
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          name?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {

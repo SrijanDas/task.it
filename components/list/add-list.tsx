@@ -58,6 +58,7 @@ function AddList({}: Props) {
             >
                 {!showInput && (
                     <Button
+                        variant="ghost"
                         className="w-full"
                         onClick={() => setShowInput(true)}
                     >
