@@ -31,7 +31,7 @@ async function BoardIdPage({ params }: Props) {
         <div
             id="bg"
             className={cn(
-                "h-screen overflow-y-hidden",
+                "h-screen overflow-hidden",
                 gradients[board?.bg_image as Gradient]
             )}
         >

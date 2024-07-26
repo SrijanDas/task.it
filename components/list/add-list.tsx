@@ -58,66 +58,74 @@ function AddList({ index }: Props) {
     }
 
     return (
-        <Card className="w-72">
-            <CardContent
-                className={clsx({
-                    "p-0": !showInput,
-                })}
-            >
-                {!showInput && (
-                    <Button
-                        variant="ghost"
-                        className="w-full"
-                        onClick={() => setShowInput(true)}
+        <div className="w-72 h-fit">
+            {!showInput ? (
+                <Button
+                    className="bg-white/20 hover:bg-white/40 w-72"
+                    onClick={() => setShowInput(true)}
+                >
+                    <Plus size={18} />
+                    Add another list
+                </Button>
+            ) : (
+                <Card className="w-full">
+                    <CardContent
+                        className={clsx({
+                            "p-0": !showInput,
+                        })}
                     >
-                        <Plus size={18} />
-                        Add another list
-                    </Button>
-                )}
-                {showInput && (
-                    <Form {...form}>
-                        <form
-                            onSubmit={form.handleSubmit(onSubmit)}
-                            className="w-full space-y-2"
-                        >
-                            <FormField
-                                control={form.control}
-                                name="title"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Enter list title..."
-                                                {...field}
-                                            />
-                                        </FormControl>
+                        {showInput && (
+                            <Form {...form}>
+                                <form
+                                    onSubmit={form.handleSubmit(onSubmit)}
+                                    className="w-full space-y-2"
+                                >
+                                    <FormField
+                                        control={form.control}
+                                        name="title"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="Enter list title..."
+                                                        {...field}
+                                                    />
+                                                </FormControl>
 
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <div className="flex items-center gap-2">
-                                <Button
-                                    disabled={form.formState.isSubmitting}
-                                    type="submit"
-                                >
-                                    Add list
-                                    {form.formState.isSubmitting && <Spinner />}
-                                </Button>
-                                <Button
-                                    onClick={() => setShowInput(false)}
-                                    variant="ghost"
-                                    type="button"
-                                    size="icon"
-                                >
-                                    <X size={24} />
-                                </Button>
-                            </div>
-                        </form>
-                    </Form>
-                )}
-            </CardContent>
-        </Card>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <div className="flex items-center gap-2">
+                                        <Button
+                                            disabled={
+                                                form.formState.isSubmitting
+                                            }
+                                            type="submit"
+                                        >
+                                            Add list
+                                            {form.formState.isSubmitting && (
+                                                <Spinner />
+                                            )}
+                                        </Button>
+                                        <Button
+                                            onClick={() => setShowInput(false)}
+                                            variant="ghost"
+                                            type="button"
+                                            size="icon"
+                                        >
+                                            <X size={24} />
+                                        </Button>
+                                    </div>
+                                </form>
+                            </Form>
+                        )}
+                    </CardContent>
+                </Card>
+            )}
+
+            {}
+        </div>
     );
 }
 
