@@ -53,6 +53,13 @@ function SiteNavbar({}: Props) {
                             <Button asChild variant="outline" size="sm">
                                 <Link href="/sign-in">Sign in</Link>
                             </Button>
+                            <Button
+                                className="hidden md:flex"
+                                asChild
+                                size="sm"
+                            >
+                                <Link href="/sign-in">Sign up</Link>
+                            </Button>
                         </SignedOut>
                     </div>
                 </div>

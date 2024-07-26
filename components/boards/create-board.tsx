@@ -23,23 +23,25 @@ import { CreateBoardForm } from "@/validators/board.validators";
 import { Input } from "../ui/input";
 import GradientButton, { gradients } from "./gradient-button";
 import { useRouter } from "next-nprogress-bar";
-import { createBoard } from "@/actions/boards.actions";
+import { createBoard, updateBoard } from "@/actions/boards.actions";
 import { useAuth } from "@clerk/nextjs";
 import { toast } from "sonner";
 import Spinner from "../ui/spinner";
 
 type Props = {
     modal: ModalProps;
+    defaultValues?: Board;
 };
 
-function CreateBoard({ modal }: Props) {
+function CreateBoard({ modal, defaultValues }: Props) {
     const router = useRouter();
     const { userId, orgId } = useAuth();
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const form = useForm<CreateBoardForm>({
         defaultValues: {
-            background: "default",
+            background: defaultValues?.bg_image ?? "default",
+            title: defaultValues?.title ?? "",
         },
     });
 
@@ -50,21 +52,45 @@ function CreateBoard({ modal }: Props) {
         }
 
         setIsSubmitting(true);
-        const { board, error } = await createBoard({
-            bg_image: data.background ?? "default",
-            title: data.title,
-            org_id: orgId,
-            user_id: userId,
-        });
 
-        if (error || !board) {
-            console.error(error);
-            toast.error("Failed to create board");
-            setIsSubmitting(false);
-            return;
+        if (defaultValues) {
+            // edit mode
+            const { board, error } = await updateBoard({
+                bg_image: data.background ?? "default",
+                title: data.title,
+                org_id: orgId,
+                user_id: userId,
+                created_at: defaultValues.created_at,
+                id: defaultValues.id,
+            });
+
+            if (error || !board) {
+                console.error(error);
+                toast.error("Failed to update board");
+                setIsSubmitting(false);
+                return;
+            }
+
+            router.push(`/boards/${board.id}`);
+        } else {
+            // create mode
+            const { board, error } = await createBoard({
+                bg_image: data.background ?? "default",
+                title: data.title,
+                org_id: orgId,
+                user_id: userId,
+            });
+
+            if (error || !board) {
+                console.error(error);
+                toast.error("Failed to create board");
+                setIsSubmitting(false);
+                return;
+            }
+
+            router.push(`/boards/${board.id}`);
         }
 
-        router.push(`/boards/${board.id}`);
         modal.onOpenChange(false);
         setIsSubmitting(false);
     }
@@ -131,7 +157,7 @@ function CreateBoard({ modal }: Props) {
                                 className="justify-center"
                                 type="submit"
                             >
-                                Create
+                                {defaultValues ? "Update" : "Create"}
                                 {isSubmitting && <Spinner />}
                             </Button>
                         </DialogFooter>

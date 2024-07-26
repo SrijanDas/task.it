@@ -50,7 +50,7 @@ function BoardContent({ board, lists }: Props) {
                     })}
                 >
                     <main className="h-screen overflow-y-hidden">
-                        <BoardHeader boardTitle={board?.title} />
+                        <BoardHeader board={board} />
                         <div className="flex flex-row items-start gap-6 p-4 h-full w-screen overflow-x-scroll">
                             <RealtimeLists listItems={lists ?? []} />
                             <AddList />

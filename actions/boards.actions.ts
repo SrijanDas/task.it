@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function getBoards(orgId: string) {
     const supabase = createClient();
@@ -36,6 +37,23 @@ export async function createBoard(
         .insert({ ...board })
         .select()
         .single();
+    return {
+        board: data,
+        error,
+    };
+}
+
+export async function updateBoard(board: Board) {
+    const supabase = createClient();
+    const { data, error } = await supabase
+        .from("boards")
+        .update({ ...board })
+        .eq("id", board.id)
+        .select()
+        .single();
+
+    revalidatePath(`/boards`);
+    revalidatePath(`/boards/${board.id}`);
     return {
         board: data,
         error,
