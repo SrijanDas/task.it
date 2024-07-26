@@ -59,12 +59,13 @@ export async function updateList({
     return { data, error };
 }
 
-export async function getLists() {
+export async function getLists(boardId: string) {
     const supabase = createClient();
 
     const { data, error } = await supabase
         .from("list")
         .select(`*, cards(*)`)
+        .eq("board_id", boardId)
         .order("index");
 
     return { data, error };

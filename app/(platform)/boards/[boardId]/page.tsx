@@ -15,7 +15,7 @@ async function BoardIdPage({ params }: Props) {
     const { board, error: boardFetchError } = await getBoardById(
         params.boardId
     );
-    const { data, error } = await getLists();
+    const { data, error } = await getLists(board?.id ?? "");
 
     if (error || boardFetchError) {
         return redirect(
