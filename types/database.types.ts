@@ -171,6 +171,7 @@ export type Database = {
       }
       list: {
         Row: {
+          board_id: string
           created_at: string
           created_by: string | null
           id: string
@@ -178,6 +179,7 @@ export type Database = {
           name: string
         }
         Insert: {
+          board_id: string
           created_at?: string
           created_by?: string | null
           id?: string
@@ -185,13 +187,22 @@ export type Database = {
           name: string
         }
         Update: {
+          board_id?: string
           created_at?: string
           created_by?: string | null
           id?: string
           index?: number | null
           name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "list_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "boards"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

@@ -53,7 +53,7 @@ function BoardContent({ board, lists }: Props) {
                         <BoardHeader board={board} />
                         <div className="flex flex-row items-start gap-6 p-4 h-full w-screen overflow-x-scroll">
                             <RealtimeLists listItems={lists ?? []} />
-                            <AddList />
+                            <AddList index={lists.length} />
                         </div>
                     </main>
                 </div>

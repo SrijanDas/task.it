@@ -5,10 +5,8 @@ import { Button } from "../ui/button";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -21,8 +19,11 @@ import clsx from "clsx";
 import Spinner from "../ui/spinner";
 import { toast } from "sonner";
 import { createList } from "@/actions/list.actions";
+import { useParams, useSearchParams } from "next/navigation";
 
-type Props = {};
+type Props = {
+    index: number;
+};
 
 const FormSchema = z.object({
     title: z.string().min(2, {
@@ -30,9 +31,10 @@ const FormSchema = z.object({
     }),
 });
 
-function AddList({}: Props) {
+function AddList({ index }: Props) {
     const [showInput, setShowInput] = useState<boolean>(false);
-
+    const params = useParams<{ boardId: string }>();
+    const boardId = params.boardId;
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -41,7 +43,13 @@ function AddList({}: Props) {
     });
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
-        const { error } = await createList(data.title);
+        if (!boardId) return;
+
+        const { error } = await createList({
+            title: data.title,
+            boardId,
+            index,
+        });
         if (error) {
             toast.error("Error creating list");
             return;

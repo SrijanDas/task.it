@@ -3,7 +3,15 @@
 import { createClient } from "@/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function createList(title: string) {
+export async function createList({
+    boardId,
+    title,
+    index,
+}: {
+    title: string;
+    boardId: string;
+    index: number;
+}) {
     const supabase = createClient();
 
     // const {data: {user}} = await supabase.auth.getUser()
@@ -12,7 +20,7 @@ export async function createList(title: string) {
 
     const { data, error } = await supabase
         .from("list")
-        .insert({ name: title })
+        .insert({ name: title, board_id: boardId, index })
         .select()
         .single();
 
@@ -62,9 +70,7 @@ export async function getLists() {
     return { data, error };
 }
 
-export async function updateListOrder(
-    lists: { id: string; index: number; name: string }[]
-) {
+export async function updateListOrder(lists: ListItem[]) {
     const supabase = createClient();
     const { data, error } = await supabase.from("list").upsert(lists);
 
