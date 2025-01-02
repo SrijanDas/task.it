@@ -15,43 +15,43 @@ export const metadata: Metadata = {
     },
     metadataBase: new URL(siteConfig.url),
     description: siteConfig.description,
-    keywords: ["Task.it", "Trello Clone", "Trello alternative"],
+    keywords: ["task.it", "trello Clone", "trello alternative"],
     authors: [
         {
-            name: "shadcn",
-            url: "https://shadcn.com",
+            name: "srijan",
+            url: "https://srijan.com",
         },
     ],
-    //   creator: "shadcn",
-    //   openGraph: {
-    //     type: "website",
-    //     locale: "en_US",
-    //     url: siteConfig.url,
-    //     title: siteConfig.name,
-    //     description: siteConfig.description,
-    //     siteName: siteConfig.name,
-    //     images: [
-    //       {
-    //         url: siteConfig.ogImage,
-    //         width: 1200,
-    //         height: 630,
-    //         alt: siteConfig.name,
-    //       },
-    //     ],
-    //   },
-    //   twitter: {
-    //     card: "summary_large_image",
-    //     title: siteConfig.name,
-    //     description: siteConfig.description,
-    //     images: [siteConfig.ogImage],
-    //     creator: "@shadcn",
-    //   },
-    //   icons: {
-    //     icon: "/favicon.ico",
-    //     shortcut: "/favicon-16x16.png",
-    //     apple: "/apple-touch-icon.png",
-    //   },
-    //   manifest: `${siteConfig.url}/site.webmanifest`,
+    creator: "srijan",
+    openGraph: {
+        type: "website",
+        locale: "en_US",
+        url: siteConfig.url,
+        title: siteConfig.name,
+        description: siteConfig.description,
+        siteName: siteConfig.name,
+        images: [
+            {
+                url: siteConfig.ogImage,
+                width: 1200,
+                height: 630,
+                alt: siteConfig.name,
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: siteConfig.name,
+        description: siteConfig.description,
+        images: [siteConfig.ogImage],
+        creator: "srijan",
+    },
+    icons: {
+        icon: "/favicon.ico",
+        shortcut: "/favicon-16x16.png",
+        apple: "/apple-touch-icon.png",
+    },
+    manifest: `${siteConfig.url}/site.webmanifest`,
 };
 
 export const viewport: Viewport = {

@@ -1,6 +1,6 @@
 export const siteConfig = {
     name: "Task.it",
-    url: "https://task-it-pi.vercel.app/sign-in",
+    url: "https://task-it-v1.vercel.app/",
     ogImage: "https://ui.shadcn.com/og.jpg",
     description: "Trello alternative. Open Source.",
     links: {
