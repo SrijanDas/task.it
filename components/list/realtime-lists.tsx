@@ -149,7 +149,34 @@ function RealtimeLists({ listItems }: Props) {
     }
 
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
+        <>
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable
+                    droppableId="board"
+                    type="list"
+                    direction="horizontal"
+                >
+                    {(provided) => (
+                        <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            style={{ display: "flex", gap: "1rem" }}
+                        >
+                            {realtimeLists.map((list, index) => (
+                                <List
+                                    setList={setRealtimeLists}
+                                    key={list.id}
+                                    list={list}
+                                    index={index}
+                                />
+                            ))}
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
+
+            {/* <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable" direction="horizontal">
                 {(provided, snapshot) => (
                     <div
@@ -158,31 +185,31 @@ function RealtimeLists({ listItems }: Props) {
                         {...provided.droppableProps}
                     >
                         {realtimeLists.map((item, index) => (
-                            <Draggable
-                                key={item.id}
-                                draggableId={item.id}
-                                index={index}
-                            >
-                                {(provided, snapshot) => (
-                                    <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                    >
-                                        <List
-                                            setList={setRealtimeLists}
-                                            key={item.id}
-                                            list={item}
-                                        />
-                                    </div>
-                                )}
-                            </Draggable>
+                            <div key={item.id} className="flex flex-col">
+                                <Draggable draggableId={item.id} index={index}>
+                                    {(provided, snapshot) => (
+                                        <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            className="w-full h-10 bg-slate-100 hover:bg-blue-100"
+                                        >
+                                            <List
+                                                setList={setRealtimeLists}
+                                                key={item.id}
+                                                list={item}
+                                            />
+                                        </div>
+                                    )}
+                                </Draggable>
+                            </div>
                         ))}
                         {provided.placeholder}
                     </div>
                 )}
             </Droppable>
-        </DragDropContext>
+        </DragDropContext> */}
+        </>
     );
 }
 

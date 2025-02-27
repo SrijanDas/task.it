@@ -47,9 +47,10 @@ import { updateCardOrder } from "@/actions/card.actions";
 type Props = {
     list: ListItem;
     setList: React.Dispatch<React.SetStateAction<ListItem[]>>;
+    index: number;
 };
 
-function List({ list, setList }: Props) {
+function List({ list, setList, index }: Props) {
     const addCardButtonRef = useRef<HTMLButtonElement | null>(null);
     const cardContainerRef = useRef<HTMLDivElement>(null);
 
@@ -118,167 +119,197 @@ function List({ list, setList }: Props) {
     const [open, setOpen] = useState<string | null>(null);
 
     return (
-        <Card className="bg-[#F1F2F4]">
-            <CardHeader className="flex-row items-center justify-between">
-                <CardTitle className="text-md w-full">
-                    {showInput ? (
-                        <Form {...form}>
-                            <form
-                                onSubmit={form.handleSubmit(onSubmit)}
-                                className="w-full space-y-2"
-                            >
-                                <FormField
-                                    control={form.control}
-                                    name="title"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <Input
-                                                    autoFocus
-                                                    placeholder="Enter a title for this card..."
-                                                    {...field}
-                                                    onBlur={() =>
-                                                        setShowInput(false)
-                                                    }
-                                                />
-                                            </FormControl>
+        <Draggable key={list.id} draggableId={list.id} index={index}>
+            {(provided) => (
+                <Card
+                    className="bg-[#F1F2F4]"
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                >
+                    <CardHeader
+                        {...provided.dragHandleProps}
+                        className="flex-row items-center justify-between hover:bg-[#DADFE1] rounded-t-lg"
+                    >
+                        <CardTitle className="text-md w-full">
+                            {showInput ? (
+                                <Form {...form}>
+                                    <form
+                                        onSubmit={form.handleSubmit(onSubmit)}
+                                        className="w-full space-y-2"
+                                    >
+                                        <FormField
+                                            control={form.control}
+                                            name="title"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormControl>
+                                                        <Input
+                                                            autoFocus
+                                                            placeholder="Enter a title for this card..."
+                                                            {...field}
+                                                            onBlur={() =>
+                                                                setShowInput(
+                                                                    false
+                                                                )
+                                                            }
+                                                        />
+                                                    </FormControl>
 
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                        <Button
+                                            className="hidden"
+                                            disabled={
+                                                form.formState.isSubmitting
+                                            }
+                                            type="submit"
+                                        >
+                                            Add card
+                                        </Button>
+                                    </form>
+                                </Form>
+                            ) : (
                                 <Button
-                                    className="hidden"
-                                    disabled={form.formState.isSubmitting}
-                                    type="submit"
+                                    className="cursor-pointer w-full justify-start font-semibold text-wrap text-start"
+                                    variant="ghost"
+                                    onClick={() => setShowInput(true)}
+                                >
+                                    {list.name}
+                                </Button>
+                            )}
+                        </CardTitle>
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button size="icon" variant="ghost">
+                                    <Ellipsis size={18} />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel>
+                                    List Actions
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    onClick={() =>
+                                        addCardButtonRef.current?.click()
+                                    }
                                 >
                                     Add card
-                                </Button>
-                            </form>
-                        </Form>
-                    ) : (
-                        <Button
-                            className="cursor-pointer w-full justify-start font-semibold text-wrap text-start"
-                            variant="ghost"
-                            onClick={() => setShowInput(true)}
-                        >
-                            {list.name}
-                        </Button>
-                    )}
-                </CardTitle>
-
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                            <Ellipsis size={18} />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuLabel>List Actions</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            onClick={() => addCardButtonRef.current?.click()}
-                        >
-                            Add card
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>Copy list</DropdownMenuItem>
-                        <DropdownMenuItem>Move list</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            onClick={() => handleDeleteList(list.id)}
-                        >
-                            Delete
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </CardHeader>
-            {list.cards && list.cards.length > 0 && (
-                <CardContent className="p-0 bg-[#F1F2F4]">
-                    <DragDropContext onDragEnd={onDragEnd}>
-                        <Droppable droppableId="droppable">
-                            {(provided, snapshot) => (
-                                <div
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                    className="flex flex-col gap-2 max-h-[calc(100vh-15rem)] px-3 overflow-y-auto overflow-x-hidden"
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>Copy list</DropdownMenuItem>
+                                <DropdownMenuItem>Move list</DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    onClick={() => handleDeleteList(list.id)}
                                 >
-                                    {list.cards?.map((card, index) => (
-                                        <div key={`card-wrapper-${card.id}`}>
-                                            <Draggable
-                                                key={card.id}
-                                                draggableId={card.id}
-                                                index={index}
-                                            >
-                                                {(provided, snapshot) => (
-                                                    <div
-                                                        role="button"
-                                                        onClick={() =>
-                                                            setOpen(card.id)
-                                                        }
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        className="bg-white rounded-lg px-3 py-2 shadow-md border text-wrap break-all"
+                                    Delete
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </CardHeader>
+                    {list.cards && list.cards.length > 0 && (
+                        <CardContent className="p-0 pt-2 bg-[#F1F2F4]">
+                            <DragDropContext onDragEnd={onDragEnd}>
+                                <Droppable droppableId="droppable">
+                                    {(provided, snapshot) => (
+                                        <div
+                                            {...provided.droppableProps}
+                                            ref={provided.innerRef}
+                                            className="flex flex-col gap-2 max-h-[calc(100vh-15rem)] px-3 overflow-y-auto overflow-x-hidden"
+                                        >
+                                            {list.cards?.map((card, index) => (
+                                                <div
+                                                    key={`card-wrapper-${card.id}`}
+                                                >
+                                                    <Draggable
+                                                        key={card.id}
+                                                        draggableId={card.id}
+                                                        index={index}
                                                     >
-                                                        <span>{card.name}</span>
-                                                        {card.total_checklist_items &&
-                                                            card.total_checklist_items >
-                                                                0 && (
-                                                                <span className="flex items-center gap-2">
-                                                                    <SquareCheckBig
-                                                                        size={
-                                                                            16
-                                                                        }
-                                                                        className="mb-0.5"
-                                                                    />
-                                                                    {`${
-                                                                        card.completed_checklist_items ??
-                                                                        0
-                                                                    }/${
-                                                                        card.total_checklist_items
-                                                                    }`}
+                                                        {(
+                                                            provided,
+                                                            snapshot
+                                                        ) => (
+                                                            <div
+                                                                role="button"
+                                                                onClick={() =>
+                                                                    setOpen(
+                                                                        card.id
+                                                                    )
+                                                                }
+                                                                ref={
+                                                                    provided.innerRef
+                                                                }
+                                                                {...provided.draggableProps}
+                                                                {...provided.dragHandleProps}
+                                                                className="bg-white rounded-lg px-3 py-2 shadow-md border text-wrap break-all"
+                                                            >
+                                                                <span>
+                                                                    {card.name}
                                                                 </span>
-                                                            )}
-                                                    </div>
-                                                )}
-                                            </Draggable>
+                                                                {card.total_checklist_items &&
+                                                                    card.total_checklist_items >
+                                                                        0 && (
+                                                                        <span className="flex items-center gap-2">
+                                                                            <SquareCheckBig
+                                                                                size={
+                                                                                    16
+                                                                                }
+                                                                                className="mb-0.5"
+                                                                            />
+                                                                            {`${
+                                                                                card.completed_checklist_items ??
+                                                                                0
+                                                                            }/${
+                                                                                card.total_checklist_items
+                                                                            }`}
+                                                                        </span>
+                                                                    )}
+                                                            </div>
+                                                        )}
+                                                    </Draggable>
 
-                                            <CardItem
-                                                cardItem={card}
-                                                listName={list.name}
-                                                onOpenChange={(value) =>
-                                                    setOpen(value)
-                                                }
-                                                open={open === card.id}
+                                                    <CardItem
+                                                        cardItem={card}
+                                                        listName={list.name}
+                                                        onOpenChange={(value) =>
+                                                            setOpen(value)
+                                                        }
+                                                        open={open === card.id}
+                                                    />
+                                                </div>
+                                            ))}
+                                            {provided.placeholder}
+
+                                            <div
+                                                ref={cardContainerRef}
+                                                className="p-1"
                                             />
                                         </div>
-                                    ))}
-                                    {provided.placeholder}
+                                    )}
+                                </Droppable>
+                            </DragDropContext>
+                        </CardContent>
+                    )}
 
-                                    <div
-                                        ref={cardContainerRef}
-                                        className="p-1"
-                                    />
-                                </div>
-                            )}
-                        </Droppable>
-                    </DragDropContext>
-                </CardContent>
+                    <CardFooter className="">
+                        <AddCard
+                            ref={addCardButtonRef}
+                            listId={list.id}
+                            index={(list.cards ?? []).length}
+                            callback={() =>
+                                cardContainerRef.current?.scrollIntoView({
+                                    behavior: "smooth",
+                                })
+                            }
+                        />
+                    </CardFooter>
+                </Card>
             )}
-
-            <CardFooter className="">
-                <AddCard
-                    ref={addCardButtonRef}
-                    listId={list.id}
-                    index={(list.cards ?? []).length}
-                    callback={() =>
-                        cardContainerRef.current?.scrollIntoView({
-                            behavior: "smooth",
-                        })
-                    }
-                />
-            </CardFooter>
-        </Card>
+        </Draggable>
     );
 }
 
